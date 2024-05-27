@@ -7,4 +7,4 @@ services:
       driver: "journald"
     restart: unless-stopped
     volumes:
-      - ./local-image-folder:/app/images
+      - ./images:/app/images
