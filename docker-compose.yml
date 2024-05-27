@@ -1,0 +1,10 @@
+version: '3'
+services:
+  scheduled-image-grab:
+    image: ghcr.io/lukaslerche/scheduled-image-grab:latest
+    container_name: scheduled-image-grab
+    logging:
+      driver: "journald"
+    restart: unless-stopped
+    volumes:
+      - ./local-image-folder:/app/images
