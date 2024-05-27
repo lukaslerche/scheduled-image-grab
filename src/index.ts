@@ -21,11 +21,19 @@ const grabImage = async (imageSourceUrl: string, imageSavePath: string, imageSav
                 fs.mkdirSync(imageSavePath, { recursive: true });
             }
 
-            fs.writeFileSync(`${imageSavePath}/${imageSaveName}_${currentImageHash}${imageExtension}`, Buffer.from(buffer));
-            console.log("Image grabbed and saved successfully");
-            previousImageHash = currentImageHash;
+            const files = fs.readdirSync(imageSavePath);
+            const existingImage = files.find(file => file.includes(currentImageHash));
+
+            if (!existingImage) {
+                fs.writeFileSync(`${imageSavePath}/${imageSaveName}_${currentImageHash}${imageExtension}`, Buffer.from(buffer));
+                console.log("Image grabbed and saved successfully");
+                previousImageHash = currentImageHash;
+            } else {
+                console.log("Skip: Image with the same MD5 already in folder.");
+                previousImageHash = currentImageHash;
+            }
         } else {
-            console.log("Image is the same as the previous one, not saving");
+            console.log("Skip: MD5 has not changed since last grab.");
         }
     } catch (error) {
         console.error("Failed to grab and save image:", error);
